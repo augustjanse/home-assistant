@@ -26,6 +26,7 @@ DEFAULT_NAME = 'Beefweb'
 
 SUPPORT_BEEFWEB = SUPPORT_PAUSE | SUPPORT_VOLUME_SET | SUPPORT_VOLUME_MUTE | \
                   SUPPORT_PLAY | SUPPORT_STOP
+OPENAPI_SPEC = 'player-api.yml'
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Required(CONF_HOST): cv.string,
@@ -38,19 +39,20 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
     name = config.get(CONF_NAME, DEFAULT_NAME)
     host = config.get(CONF_HOST)
     port = config.get(CONF_PORT, DEFAULT_PORT)
+    spec_path = hass.config.path(OPENAPI_SPEC)
 
-    add_entities([BeefwebDevice(name, host, port)])
+    add_entities([BeefwebDevice(name, host, port, spec_path)])
 
 
 class BeefwebDevice(MediaPlayerDevice):
     """Representation of a beefweb player."""
 
-    def __init__(self, name, host, port):
+    def __init__(self, name, host, port, spec_path):
         """Initialize the beefweb device."""
         from bravado.client import SwaggerClient
         from bravado.swagger_model import load_file
 
-        client = SwaggerClient.from_spec(load_file('player-api.yml'))
+        client = SwaggerClient.from_spec(load_file(spec_path))
         self._client = client
         self._name = name
         self._volume = None
