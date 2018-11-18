@@ -15,34 +15,37 @@ from homeassistant.components.media_player import (
     SUPPORT_STOP, SUPPORT_VOLUME_MUTE, SUPPORT_VOLUME_SET,
     MediaPlayerDevice)
 from homeassistant.const import (
-    CONF_NAME, STATE_IDLE, STATE_PAUSED, STATE_PLAYING)
+    CONF_NAME, CONF_HOST, CONF_PORT, STATE_IDLE, STATE_PAUSED, STATE_PLAYING)
 
 REQUIREMENTS = ['bravado==10.2.0']
 
 _LOGGER = logging.getLogger(__name__)
 
-CONF_ARGUMENTS = 'arguments'
-DEFAULT_NAME = 'beefweb'
+DEFAULT_PORT = 8880
+DEFAULT_NAME = 'Beefweb'
 
 SUPPORT_BEEFWEB = SUPPORT_PAUSE | SUPPORT_VOLUME_SET | SUPPORT_VOLUME_MUTE | \
                   SUPPORT_PLAY | SUPPORT_STOP
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
-    vol.Optional(CONF_ARGUMENTS, default=''): cv.string,
-    vol.Optional(CONF_NAME): cv.string,
+    vol.Required(CONF_HOST): cv.string,
+    vol.Optional(CONF_PORT): cv.port
 })
 
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
     """Set up the beefweb platform."""
-    add_entities([BeefwebDevice(config.get(CONF_NAME, DEFAULT_NAME),
-                            config.get(CONF_ARGUMENTS))])
+    name = config.get(CONF_NAME, DEFAULT_NAME)
+    host = config.get(CONF_HOST)
+    port = config.get(CONF_PORT, DEFAULT_PORT)
+
+    add_entities([BeefwebDevice(name, host, port)])
 
 
 class BeefwebDevice(MediaPlayerDevice):
     """Representation of a beefweb player."""
 
-    def __init__(self, name, arguments):
+    def __init__(self, name, host, port):
         """Initialize the beefweb device."""
         from bravado.client import SwaggerClient
         from bravado.swagger_model import load_file
