@@ -142,7 +142,7 @@ class BeefwebDevice(MediaPlayerDevice):
         """Set volume level, range 0..1."""
         import math
 
-        self._client.player.setPlayerState(20 * math.log10(volume)).result()
+        self._client.player.setPlayerState(volume=20*math.log10(volume)).result()
         self._volume = volume
 
     def media_play(self):
