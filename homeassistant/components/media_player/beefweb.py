@@ -79,8 +79,8 @@ class BeefwebDevice(MediaPlayerDevice):
             self._media_position_updated_at = dt_util.utcnow()
             self._media_position = position
 
-        self._volume = 10 ** (status.volume['value'] / 20)
-        self._muted = status.volume['isMuted']
+        self._volume = 10 ** (state.volume['value'] / 20)
+        self._muted = state.volume['isMuted']
 
         return True
 
