@@ -131,31 +131,31 @@ class BeefwebDevice(MediaPlayerDevice):
 
     def media_seek(self, position):
         """Seek the media to a specific location."""
-        self._client.player.setPlayerState(position=position).result()
+        self._client.player.setPlayerState(position=position).response()
 
     def mute_volume(self, mute):
         """Mute the volume."""
-        self._client.player.setPlayerState(isMuted=mute).result()
+        self._client.player.setPlayerState(isMuted=mute).response()
         self._muted = mute
 
     def set_volume_level(self, volume):
         """Set volume level, range 0..1."""
         import math
 
-        self._client.player.setPlayerState(volume=20*math.log10(volume)).result()
+        self._client.player.setPlayerState(volume=20 * math.log10(volume)).response()
         self._volume = volume
 
     def media_play(self):
         """Send play command."""
-        self._client.player.playCurrent().result()
+        self._client.player.playCurrent().response()
         self._state = STATE_PLAYING
 
     def media_pause(self):
         """Send pause command."""
-        self._client.player.pause().result()
+        self._client.player.pause().response()
         self._state = STATE_PAUSED
 
     def media_stop(self):
         """Send stop command."""
-        self._client.player.stop().result()
+        self._client.player.stop().response()
         self._state = STATE_IDLE
