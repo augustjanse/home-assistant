@@ -113,6 +113,8 @@ class BeefwebDevice(MediaPlayerDevice):
         """Return the state of the device."""
         return self._state
 
+    # access_token
+
     @property
     def volume_level(self):
         """Volume level of the media player (0..1)."""
@@ -123,10 +125,7 @@ class BeefwebDevice(MediaPlayerDevice):
         """Boolean if volume is currently muted."""
         return self._muted
 
-    @property
-    def supported_features(self):
-        """Flag media player features that are supported."""
-        return SUPPORT_BEEFWEB
+    # media_content_id
 
     @property
     def media_content_type(self):
@@ -148,9 +147,52 @@ class BeefwebDevice(MediaPlayerDevice):
         """When was the position of the current playing media valid."""
         return self._media_position_updated_at
 
-    def media_seek(self, position):
-        """Seek the media to a specific location."""
-        self._client.player.setPlayerState(position=position).response()
+    # media_image_url
+
+    # media_image_hash
+
+    # media_title
+
+    # media_artist
+
+    # media_album_name
+
+    # media_album_artist
+
+    # media_track
+
+    # media_series_title
+
+    # media_season
+
+    # media_episode
+
+    # media_channel
+
+    # media_playlist
+
+    # app_id
+
+    # app_name
+
+    # source
+
+    # source_list
+
+    # sound_mode
+
+    # sound_mode_list
+
+    # shuffle
+
+    @property
+    def supported_features(self):
+        """Flag media player features that are supported."""
+        return SUPPORT_BEEFWEB
+
+    # turn_on
+
+    # turn_off
 
     def mute_volume(self, mute):
         """Mute the volume."""
@@ -178,3 +220,21 @@ class BeefwebDevice(MediaPlayerDevice):
         """Send stop command."""
         self._client.player.stop().response()
         self._state = STATE_IDLE
+
+    # media_previous_track
+
+    # media_next_track
+
+    def media_seek(self, position):
+        """Seek the media to a specific location."""
+        self._client.player.setPlayerState(position=position).response()
+
+    # play_media
+
+    # select_source
+
+    # select_sound_mode
+
+    # clear_playlist
+
+    # set_shuffle
