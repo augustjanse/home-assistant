@@ -62,6 +62,8 @@ class BeefwebDevice(MediaPlayerDevice):
         self._media_position = None
         self._media_duration = None
 
+        self._media_content_id = None
+
     def update(self):
         """Get the latest details from the device."""
         import math
@@ -101,6 +103,8 @@ class BeefwebDevice(MediaPlayerDevice):
         self._volume = 10 ** (state.volume['value'] / 20)
         self._muted = state.volume['isMuted']
 
+        self._media_content_id = str(state.activeItem['playlistIndex']) + ':' + str(state.activeItem['index'])
+
         return True
 
     @property
@@ -125,7 +129,9 @@ class BeefwebDevice(MediaPlayerDevice):
         """Boolean if volume is currently muted."""
         return self._muted
 
-    # media_content_id
+    @property
+    def media_content_id(self):
+        return self._media_content_id
 
     @property
     def media_content_type(self):
