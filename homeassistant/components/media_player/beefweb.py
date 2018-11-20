@@ -15,7 +15,7 @@ from homeassistant.components.media_player import (
     SUPPORT_STOP, SUPPORT_VOLUME_MUTE, SUPPORT_VOLUME_SET,
     MediaPlayerDevice)
 from homeassistant.const import (
-    CONF_NAME, CONF_HOST, CONF_PORT, STATE_IDLE, STATE_PAUSED, STATE_PLAYING)
+    CONF_NAME, CONF_HOST, CONF_PORT, STATE_IDLE, STATE_PAUSED, STATE_PLAYING, STATE_OFF)
 
 REQUIREMENTS = ['bravado==10.2.0']
 
@@ -64,15 +64,34 @@ class BeefwebDevice(MediaPlayerDevice):
 
     def update(self):
         """Get the latest details from the device."""
-        state = self._client.player.getPlayerState().response().result['player']
+        import math
+        self._volume = self._volume if self._volume is not None else 10 ** -8
+
+        # Cached values in case of IO failure
+        default = {
+            'player': self._client.get_model('PlayerState')(activeItem={
+                'duration': self._media_duration,
+                'position': self._media_position
+            },
+                playbackState='off',
+                volume={
+                    'isMuted': self._muted,
+                    'value': 20 * math.log10(self._volume)
+                })
+        }
+
+        state = self._client.player.getPlayerState().response(timeout=9, fallback_result=default).result['player']
 
         status = state.playbackState
         if status == 'playing':
             self._state = STATE_PLAYING
         elif status == 'paused':
             self._state = STATE_PAUSED
-        else:
+        elif status == 'stopped':
             self._state = STATE_IDLE
+        else:
+            self._state = STATE_OFF
+
         self._media_duration = state.activeItem['duration']
         position = state.activeItem['position']
         if position != self._media_position:
