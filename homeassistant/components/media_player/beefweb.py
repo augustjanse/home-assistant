@@ -26,7 +26,7 @@ DEFAULT_NAME = 'Beefweb'
 
 SUPPORT_BEEFWEB = SUPPORT_PAUSE | SUPPORT_VOLUME_SET | SUPPORT_VOLUME_MUTE | \
                   SUPPORT_PLAY | SUPPORT_STOP
-OPENAPI_SPEC = 'player-api.yml'
+OPENAPI_SPEC = 'player-api.yml' # Put this in config/: https://github.com/hyperblast/beefweb/blob/master/docs/player-api.yml
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Required(CONF_HOST): cv.string,
