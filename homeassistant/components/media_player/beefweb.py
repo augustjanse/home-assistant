@@ -196,9 +196,11 @@ class BeefwebDevice(MediaPlayerDevice):
         """Flag media player features that are supported."""
         return SUPPORT_BEEFWEB
 
-    # turn_on
+    def turn_on(self):
+        self.media_play()
 
-    # turn_off
+    def turn_off(self):
+        self.media_pause()
 
     def mute_volume(self, mute):
         """Mute the volume."""
